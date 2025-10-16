@@ -1,0 +1,8 @@
+- [ ] bardzo duże PSA, możliwy brak przecinka
+- [x] uzupełnić brakujące dane
+- [x] rozdzielić micro EPE od EPE
+- [x] sprawdzić zduplikowanych pacjentów 49 239 285
+- [X] wspólny kod do wczytywania bazy
+- [ ] podział zadań
+- [ ] przejść na AUC, specificity/sensitivity
+- [ ] porównać wynik baseline do paperów

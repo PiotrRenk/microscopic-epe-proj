@@ -1,7 +1,6 @@
-.venv/
-venv/
+.*
+!.gitignore
 
-.idea/
-.vscode/
+venv/
 
 test.*

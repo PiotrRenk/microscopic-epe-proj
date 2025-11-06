@@ -26,13 +26,13 @@ Testowany model: `XGBoost` (zoptymalizowany pod kątem AUC)
 
 Stosuenk negatywnych do pozytywnych przypadków SVI:
 
-![alt text](svi_dist.png)
+![alt text](./raport_svi/svi_dist.png)
 
 
 ## Wyniki
 **Krzywa ROC:**
 
-![alt text](svi_auc.png)
+![alt text](./raport_svi/svi_auc.png)
 
 <table>
     <tr>
@@ -48,7 +48,7 @@ Stosuenk negatywnych do pozytywnych przypadków SVI:
         <td>Sensitivity</td>
         <td>0.3000</td>
         <td rowspan="4">
-            <img src="svi_conf_27.png" alt="Confusion Matrix at 0.27 threshold">
+            <img src="./raport_svi/svi_conf_27.png" alt="Confusion Matrix at 0.27 threshold">
         </td>
     </tr>
     <tr>
@@ -77,7 +77,7 @@ Stosuenk negatywnych do pozytywnych przypadków SVI:
         <td>Sensitivity</td>
         <td>0.2000</td>
         <td rowspan="4">
-            <img src="svi_conf_61.png" alt="Confusion Matrix at 0.61 threshold">
+            <img src="./raport_svi/svi_conf_61.png" alt="Confusion Matrix at 0.61 threshold">
         </td>
     </tr>
     <tr>
@@ -105,7 +105,7 @@ Stosuenk negatywnych do pozytywnych przypadków SVI:
         <td>Sensitivity</td>
         <td>0.4000</td>
         <td rowspan="4">
-            <img src="svi_conf_10.png" alt="Confusion Matrix at 0.1 threshold">
+            <img src="./raport_svi/svi_conf_10.png" alt="Confusion Matrix at 0.1 threshold">
         </td>
     </tr>
     <tr>
@@ -121,4 +121,4 @@ Stosuenk negatywnych do pozytywnych przypadków SVI:
 
 ## Feature inportances
 
-![alt text](svi_fe.png)
+![alt text](./raport_svi/svi_fe.png)

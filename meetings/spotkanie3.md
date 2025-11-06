@@ -1,5 +1,5 @@
-- [ ] przewidywanie dla wszytkich EPE (micro/macro/both)
+- [x] przewidywanie dla wszytkich EPE (micro/macro/both)
 - [ ] gdzie mylą się radiolodzy, confusion matrix
-- [ ] decision threshold, sensitivity, specificity plots 
-- [ ] uwspólnić wczytywanie danych, sposób uczenia modelu
+- [x] decision threshold, sensitivity, specificity plots 
+- [x] uwspólnić wczytywanie danych, sposób uczenia modelu
 - [ ] zrobić raport z zadań, 

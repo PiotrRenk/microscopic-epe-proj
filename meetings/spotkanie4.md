@@ -1,7 +1,6 @@
-upgrading
-Smote tylko na treningowym?
-Discrimination threshold
-słabo że optymalizujemy recall (chyba chcemy precyzje) (specyfisity)
+- [] upgrading
+- [x] SMOTE tylko na X_train
+- [] discrimination threshold for best specificity
 
 Sekcja - 5 pomysłów
 co sprawdzaliśmy na podstawie czego i co przewidywaliśmy

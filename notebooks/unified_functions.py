@@ -10,7 +10,7 @@ from sklearn.model_selection import GridSearchCV, StratifiedKFold, train_test_sp
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from yellowbrick.classifier import DiscriminationThreshold
-from imblearn.over_sampling import SMOTE
+from imblearn.over_sampling import SMOTENC
 
 
 
@@ -62,11 +62,7 @@ def train_and_evaluate_model(model, X, y, numerical_cols, categorical_cols, n_fo
             print(
                 f"ROC AUC score: {roc_auc_score(y_test_split, y_pred_prob_fold)}\n")
 
-        model_pipeline = get_model_pipeline(
-            model, numerical_cols, categorical_cols)
         best_params = model.get_params()
-
-        model_pipeline.fit(X, y)
 
         print(f"Total scores:")
 
@@ -142,6 +138,12 @@ def plot_confusion_matrix(y_true, y_pred=None, y_pred_probs=None, threshold=0.5)
     plt.title(f'Confusion matrix (threshold={threshold})')
     plt.show()
 
+    tn, fp, fn, tp = cm.ravel()
+    print("=" * 30)
+    print(f"Sensitivity: {tp / (tp + fn):.4f}")
+    print(f"Specificity: {tn / (tn + fp):.4f}")
+    print(f"Accuracy: {(tp + tn) / (tp + tn + fp + fn):.4f}%")
+    print("=" * 30)
 
 def plot_feature_importances(model, X, y):
     explainer = dx.Explainer(model, X, y)
@@ -181,17 +183,17 @@ def train_and_evaluate_model_with_smote(
             ])
 
             X_train_imputed = preprocessor.fit_transform(X_train)
-            X_test_imputed = preprocessor.transform(X_test)
 
-            smote = SMOTE(random_state=42)
+            smote = SMOTENC(random_state=42, categorical_features=[X.columns.get_loc(col) for col in categorical_cols])
             X_train_smote, y_train_smote = smote.fit_resample(X_train_imputed, y_train)
             
             X_train_smote = pd.DataFrame(X_train_smote, columns=numerical_cols + categorical_cols)
 
-            model.fit(X_train_smote, y_train_smote)
+            model_pipeline = get_model_pipeline(model, numerical_cols, categorical_cols)
+            model_pipeline.fit(X_train_smote, y_train_smote)
 
-            y_pred_prob_fold = model.predict_proba(X_test_imputed)[:, 1]
-            y_pred_fold = model.predict(X_test_imputed)
+            y_pred_prob_fold = model_pipeline.predict_proba(X_test)[:, 1]
+            y_pred_fold = model_pipeline.predict(X_test)
 
             y_pred_probs = np.concatenate([y_pred_probs, y_pred_prob_fold])
             y_pred = np.concatenate([y_pred, y_pred_fold])
@@ -220,9 +222,8 @@ def train_and_evaluate_model_with_smote(
         ])
 
         X_train_imputed = preprocessor.fit_transform(X_train)
-        X_test_imputed = preprocessor.transform(X_test)
 
-        smote = SMOTE(random_state=42)
+        smote = SMOTENC(random_state=42, categorical_features=[X.columns.get_loc(col) for col in categorical_cols])
         X_train_smote, y_train_smote = smote.fit_resample(X_train_imputed, y_train)
 
         X_train_smote = pd.DataFrame(X_train_smote, columns=numerical_cols + categorical_cols)
@@ -232,11 +233,14 @@ def train_and_evaluate_model_with_smote(
         )
         model.set_params(**best_params)
         print(f"Best params after tuning:\n{best_params}")
+        
+        model_pipeline = get_model_pipeline(
+            model, numerical_cols, categorical_cols)
+        
+        model_pipeline.fit(X_train_smote, y_train_smote)
 
-        model.fit(X_train_smote, y_train_smote)
-
-        y_pred_probs = model.predict_proba(X_test_imputed)[:, 1]
-        y_pred = model.predict(X_test_imputed)
+        y_pred_probs = model_pipeline.predict_proba(X_test)[:, 1]
+        y_pred = model_pipeline.predict(X_test)
         y_true = y_test
 
         fpr, tpr, _ = roc_curve(y_test, y_pred_probs)

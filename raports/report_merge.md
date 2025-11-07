@@ -125,6 +125,15 @@ Stosunek negatywnych do pozytywnych przypadków naciekania pozatorebkowego EPE:
 
 </table>
 
+**Porównanie do modeli z prac naukowych**
+| Praca naukowa | AUC |
+|----------------|-----|
+|Combined Clinical Parameters and Multiparametric Magnetic Resonance Imaging for the Prediction of Extraprostatic Disease—A Risk Model for Patient-tailored Risk Stratification When Planning Radical Prostatectomy| 0.87|
+|Diagnostic performance of prediction models for extraprostatic extension in prostate cancer: a systematic review and meta-analysis| 0.80|
+|Integration of MRI to clinical nomogram for predicting pathological stage before radical prostatectomy| 0.74|
+
+
+
 # Przewidywanie makroskopowego naciekania pozatorebkowego (Macroscopic EPE) na podstawie badania MRI i biopsji
 
 ## Dane

@@ -40,6 +40,8 @@ Stosunek negatywnych do pozytywnych przypadków naciekania pozatorebkowego EPE:
 
 **Metryki**
 
+W zależności od preferencji jakie metryki (np. specificity, sensitivity, accuracy) chcemy optymalizować możemy zmieniać próg decyzyjny modelu i otrzymać różne wyniki. Poniżej prezentujemy przykładowe progi:
+
 <table>
     <tr>
         <th colspan="3" style="text-align:center">Próg decyzji 0.22</th>

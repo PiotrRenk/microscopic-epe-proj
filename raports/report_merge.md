@@ -24,10 +24,14 @@ Przewidywana kolumna: `EPE RP`
 
 Testowany model: `XGBoost` (zoptymalizowany pod kątem brier score)
 
+
+<div style="page-break-before:always"></div>
+
 Stosunek negatywnych do pozytywnych przypadków naciekania pozatorebkowego EPE:
 
 ![alt text](raport_epe_files/epe_dist.png)
 
+<div style="page-break-before:always"></div>
 
 ## Wyniki
 **Krzywa ROC:**
@@ -37,6 +41,8 @@ Stosunek negatywnych do pozytywnych przypadków naciekania pozatorebkowego EPE:
 **Najbardziej wartościowe kolumny dla modelu:**
 
 ![alt text](raport_epe_files/epe_importances.png)
+
+<div style="page-break-before:always"></div>
 
 **Metryki**
 
@@ -70,6 +76,7 @@ W zależności od preferencji jakie metryki (np. specificity, sensitivity, accur
 
 </table>
 
+<div style="page-break-before:always"></div>
 
 <table>
     <tr>
@@ -127,6 +134,8 @@ W zależności od preferencji jakie metryki (np. specificity, sensitivity, accur
 
 </table>
 
+<div style="page-break-before:always"></div>
+
 **Porównanie do modeli z prac naukowych**
 | Praca naukowa | AUC |
 |----------------|-----|
@@ -135,6 +144,8 @@ W zależności od preferencji jakie metryki (np. specificity, sensitivity, accur
 |Integration of MRI to clinical nomogram for predicting pathological stage before radical prostatectomy| 0.74|
 
 
+
+<div style="page-break-before:always"></div>
 
 # Przewidywanie makroskopowego naciekania pozatorebkowego (Macroscopic EPE) na podstawie badania MRI i biopsji
 
@@ -162,10 +173,13 @@ Przewidywana kolumna: `EPE macro` (utworzona kolumna, która posiada wartość 1
 
 Testowany model: `XGBoost` (zoptymalizowany pod kątem brier score)
 
+<div style="page-break-before:always"></div>
+
 Stosunek negatywnych do pozytywnych przypadków naciekania makroskopowego:
 
 ![alt text](raport_epe_files/macro_epe_dist.png)
 
+<div style="page-break-before:always"></div>
 
 ## Wyniki
 **Krzywa ROC:**
@@ -175,6 +189,8 @@ Stosunek negatywnych do pozytywnych przypadków naciekania makroskopowego:
 **Najbardziej wartościowe kolumny dla modelu:**
 
 ![alt text](raport_epe_files/macro_importances.png)
+
+<div style="page-break-before:always"></div>
 
 **Metryki**
 
@@ -236,6 +252,8 @@ Stosunek negatywnych do pozytywnych przypadków naciekania makroskopowego:
 </table>
 
 
+<div style="page-break-before:always"></div>
+
 # Przewidywanie mikroskopowego naciekania pozatorebkowego (Microscopic EPE) na podstawie badania MRI i biopsji
 
 ## Dane
@@ -260,15 +278,16 @@ Użyte kolumny:
 
 Przewidywana kolumna: `EPE micro` (utworzona kolumna, która posiada wartość 1 jeśli `EPE RP` == 1 oraz `MRI EPE` == 0, w przeciwnym wypadku 0)
 
-<!-- reduced_df['EPE micro'] = (((reduced_df['EPE RP'] == 1) & (reduced_df['MRI EPE (naciek poza torebke)'] == 0))).astype(float)
-reduced_df['EPE macro'] = (((reduced_df['EPE RP'] == 1) & (reduced_df['MRI EPE (naciek poza torebke)'] == 1))).astype(float) -->
-
 Testowany model: `XGBoost` (zoptymalizowany pod kątem brier score)
+
+<div style="page-break-before:always"></div>
 
 Stosuenk negatywnych do pozytywnych przypadków naciekania mikroskopowego:
 
 ![alt text](raport_epe_files/micro_epe_dist.png)
 
+
+<div style="page-break-before:always"></div>
 
 ## Wyniki
 **Krzywa ROC:**
@@ -277,7 +296,9 @@ Stosuenk negatywnych do pozytywnych przypadków naciekania mikroskopowego:
 
 **Najbardziej wartościowe kolumny dla modelu:**
 
-![alt text](raport_epve_files/micro_importances.png)
+![alt text](raport_epe_files/micro_importances.png)
+
+<div style="page-break-before:always"></div>
 
 **Metryki**
 
@@ -338,6 +359,9 @@ Stosuenk negatywnych do pozytywnych przypadków naciekania mikroskopowego:
 
 </table>
 
+
+<div style="page-break-before:always"></div>
+
 # Przewidywanie naciekania na węzły chłonne na podstawie badania MRI i biopsji
 
 ## Dane
@@ -364,16 +388,20 @@ Przewidywana kolumna: `N+`
 
 Testowany model: `XGBoost` (zoptymalizowany pod kątem AUC)
 
+<div style="page-break-before:always"></div>
+
 Stosuenk negatywnych do pozytywnych przypadków naciekania na węzły chłonne:
 
 ![alt text](img_n+/dystrybucja_n_plus.png)
 
+<div style="page-break-before:always"></div>
 
 ## Wyniki
 **Krzywa ROC:**
 
 ![alt text](img_n+/xgboost_grid_auc.png)
 
+<div style="page-break-before:always"></div>
 
 **Macierz błędów:**
 
@@ -406,7 +434,7 @@ Stosuenk negatywnych do pozytywnych przypadków naciekania na węzły chłonne:
 
 </table>
 
---- 
+<div style="page-break-before:always"></div>
 
 Otrzymane AUC jest wysokie.
 
@@ -443,6 +471,7 @@ Zmieniając próg decyzji możemy sterować tą wielkością kosztem zwiększeni
 
 </table>
 
+<div style="page-break-before:always"></div>
 
 <table>
     <tr>
@@ -472,6 +501,8 @@ Zmieniając próg decyzji możemy sterować tą wielkością kosztem zwiększeni
 
 </table>
 
+<div style="page-break-before:always"></div>
+
 ## Najwzażniejsze kolumny wskazane przez model
 1. `Bx ISUP Grade`
 2. `PSA`
@@ -481,6 +512,9 @@ Zmieniając próg decyzji możemy sterować tą wielkością kosztem zwiększeni
 **Wpływ poszczególnych kolumn na ostateczny wynik**
 
 ![alt text](./img_n+/feature_importance.png)
+
+
+<div style="page-break-before:always"></div>
 
 # Przewidywanie SVI RP na podstawie badania MRI i biopsji
 
@@ -508,15 +542,21 @@ Przewidywana kolumna: `SVI`
 
 Testowany model: `XGBoost` (zoptymalizowany pod kątem AUC)
 
+<div style="page-break-before:always"></div>
+
 Stosuenk negatywnych do pozytywnych przypadków SVI:
 
 ![alt text](./raport_svi/svi_dist.png)
 
 
+<div style="page-break-before:always"></div>
+
 ## Wyniki
 **Krzywa ROC:**
 
 ![alt text](./raport_svi/svi_auc.png)
+
+<div style="page-break-before:always"></div>
 
 <table>
     <tr>
@@ -546,7 +586,6 @@ Stosuenk negatywnych do pozytywnych przypadków SVI:
 
 </table>
 
-
 <table>
     <tr>
         <th colspan="3" style="text-align:center">Próg decyzji 0.61</th>
@@ -574,6 +613,8 @@ Stosuenk negatywnych do pozytywnych przypadków SVI:
     </tr>
 
 </table>
+
+<div style="page-break-before:always"></div>
 
 <table>
     <tr>
@@ -603,9 +644,13 @@ Stosuenk negatywnych do pozytywnych przypadków SVI:
 
 </table>
 
+
 ## Feature inportances
 
 ![alt text](./raport_svi/svi_fe.png)
+
+
+<div style="page-break-before:always"></div>
 
 # Przewidywanie naciekania pozatorebkowego na podstawie badania MRI (w późniejszym etapie dodatkowo gdzie celować biopsję).
 
@@ -626,16 +671,20 @@ Przewidywana kolumna: `EPE RP`
 
 Testowany model: `XGBoost` (zoptymalizowany pod kątem AUC)
 
+<div style="page-break-before:always"></div>
+
 Stosunek negatywnych do pozytywnych przypadków naciekania pozatorebkowego:
 
 ![alt text](zdjecia_tosi/dystrybucja_epe_rp.png)
 
+<div style="page-break-before:always"></div>
 
 ## Wyniki
 **Krzywa ROC:**
 
 ![alt text](zdjecia_tosi/roc_curve.png)
 
+<div style="page-break-before:always"></div>
 
 **Macierz błędów:**
 
@@ -654,59 +703,8 @@ Otrzymane AUC jest w porządku.
 Zmieniając próg decyzji możemy sterować tą wielkością kosztem zwiększenia FP, zwiększymy sensitivity ale spadnie zarówno accuracy jak i specificity.
 
 
-<!-- <table>
-    <tr>
-        <th colspan="3" style="text-align:center">Próg decyzji 0.1</th>
-    </tr>
-    <tr>
-        <th style="text-align:center">Metryka</th>
-        <th style="text-align:center">Wynik</th>
-        <th style="text-align:center">Macierz błędów</th>
-    </tr>
-    </tr>
-    <tr>
-        <td>Sensitivity</td>
-        <td>0.5000</td>
-        <td rowspan="4">
-            <img src="xgboost_grid_conf_at_10.png" alt="Confusion Matrix at 0.1 threshold">
-        </td>
-    </tr>
-    <tr>
-        <td>Specificity</td>
-        <td>0.8767</td>
-    </tr>
-    <tr>
-        <td>Accuracy</td>
-        <td>0.8395</td>
-    </tr>
 
-</table>
+<div style="page-break-before:always"></div>
 
-
-<table>
-    <tr>
-        <th colspan="3" style="text-align:center">Próg decyzji 0.074</th>
-    </tr>
-    <tr>
-        <th style="text-align:center">Metryka</th>
-        <th style="text-align:center">Wynik</th>
-        <th style="text-align:center">Macierz błędów</th>
-    </tr>
-    </tr>
-    <tr>
-        <td>Sensitivity</td>
-        <td>0.8750</td>
-        <td rowspan="4">
-            <img src="xgboost_grid_conf_at_74.png" alt="Confusion Matrix at 0.074 threshold">
-        </td>
-    </tr>
-    <tr>
-        <td>Specificity</td>
-        <td>0.7945</td>
-    </tr>
-    <tr>
-        <td>Accuracy</td>
-        <td>0.8025</td>
-    </tr>
-
-</table> -->
+# Porównanie części wspólnej kolumn użytych w powyższych badaniach
+![upsetplot](upsetplot.png)

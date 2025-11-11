@@ -707,4 +707,8 @@ Zmieniając próg decyzji możemy sterować tą wielkością kosztem zwiększeni
 <div style="page-break-before:always"></div>
 
 # Porównanie części wspólnej kolumn użytych w powyższych badaniach
+**Upset plot**
 ![upsetplot](upsetplot.png)
+
+**Venn diagram**
+![venn diagram](venn_diagram.png)

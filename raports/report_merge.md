@@ -690,18 +690,109 @@ Stosunek negatywnych do pozytywnych przypadków naciekania pozatorebkowego:
 
 ![alt text](zdjecia_tosi/confusion_matrix.png)
 
+<div style="page-break-before:always"></div>
+
+**Variable Importance:**
+
+![alt text](zdjecia_tosi/variable.png)
+
 **Metryki**
 Metryka | wynik
 :---|:---
 AUC | 0.80
 Sensitivity | 0.6538
-Specificity | 0.80
-Accuracy | 0.7531
+Specificity | 0.8545
+Accuracy | 0.7901
 
 Otrzymane AUC jest w porządku.
 
 Zmieniając próg decyzji możemy sterować tą wielkością kosztem zwiększenia FP, zwiększymy sensitivity ale spadnie zarówno accuracy jak i specificity.
 
+
+<table>
+    <tr>
+        <th colspan="3" style="text-align:center">Próg decyzji 0.185</th>
+    </tr>
+    <tr>
+        <th style="text-align:center">Metryka</th>
+        <th style="text-align:center">Wynik</th>
+        <th style="text-align:center">Macierz błędów</th>
+    </tr>
+    </tr>
+    <tr>
+        <td>Sensitivity</td>
+        <td>1.0000</td>
+        <td rowspan="4">
+            <img src="./zdjecia_tosi/cf_sensitivity.png" alt="Confusion Matrix at 0.185 threshold">
+        </td>
+    </tr>
+    <tr>
+        <td>Specificity</td>
+        <td>0.1091</td>
+    </tr>
+    <tr>
+        <td>Accuracy</td>
+        <td>0.3951</td>
+    </tr>
+
+</table>
+
+
+<table>
+    <tr>
+        <th colspan="3" style="text-align:center">Próg decyzji 0.28</th>
+    </tr>
+    <tr>
+        <th style="text-align:center">Metryka</th>
+        <th style="text-align:center">Wynik</th>
+        <th style="text-align:center">Macierz błędów</th>
+    </tr>
+    </tr>
+    <tr>
+        <td>Sensitivity</td>
+        <td>0.8846</td>
+        <td rowspan="4">
+            <img src="./zdjecia_tosi/cf_tf.png" alt="Confusion Matrix at 0.28 threshold">
+        </td>
+    </tr>
+    <tr>
+        <td>Specificity</td>
+        <td>0.3455</td>
+    </tr>
+    <tr>
+        <td>Accuracy</td>
+        <td>0.5185</td>
+    </tr>
+
+</table>
+
+<table>
+    <tr>
+        <th colspan="3" style="text-align:center">Próg decyzji 0.5</th>
+    </tr>
+    <tr>
+        <th style="text-align:center">Metryka</th>
+        <th style="text-align:center">Wynik</th>
+        <th style="text-align:center">Macierz błędów</th>
+    </tr>
+    </tr>
+    <tr>
+        <td>Sensitivity</td>
+        <td>0.6538</td>
+        <td rowspan="4">
+            <img src="./zdjecia_tosi/confusion_matrix.png" alt="Confusion Matrix at 0.5 threshold">
+        </td>
+    </tr>
+    <tr>
+        <td>Specificity</td>
+        <td>0.8545</td>
+    </tr>
+    <tr>
+        <td>Accuracy</td>
+        <td>0.7901</td>
+    </tr>
+
+</table>
 
 
 <div style="page-break-before:always"></div>

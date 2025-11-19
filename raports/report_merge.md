@@ -690,11 +690,12 @@ Stosunek negatywnych do pozytywnych przypadków naciekania pozatorebkowego:
 
 ![alt text](zdjecia_tosi/confusion_matrix.png)
 
-<div style="page-break-before:always"></div>
 
 **Variable Importance:**
 
 ![alt text](zdjecia_tosi/variable.png)
+
+<div style="page-break-before:always"></div>
 
 **Metryki**
 Metryka | wynik
@@ -737,6 +738,7 @@ Zmieniając próg decyzji możemy sterować tą wielkością kosztem zwiększeni
 
 </table>
 
+<div style="page-break-before:always"></div>
 
 <table>
     <tr>

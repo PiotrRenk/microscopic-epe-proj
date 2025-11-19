@@ -1,0 +1,4 @@
+- [X] w końcu zrobić upgrading
+- [X] czemu N+/SVI występuje bez żadnego EPE
+- [] sprawdzić wszytkie dane na spójność
+- [X] TabPFN dla wszystkiego

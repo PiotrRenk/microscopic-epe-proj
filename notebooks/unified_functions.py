@@ -6,7 +6,7 @@ import seaborn as sns
 from imblearn.over_sampling import SMOTENC
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
-from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve
+from sklearn.metrics import confusion_matrix, roc_auc_score, roc_curve, precision_recall_curve
 from sklearn.model_selection import GridSearchCV, StratifiedKFold, train_test_split
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
@@ -140,7 +140,7 @@ def plot_confusion_matrix(y_true, y_pred=None, y_pred_probs=None, threshold=0.5)
     print("=" * 30)
     print(f"Sensitivity: {tp / (tp + fn):.4f}")
     print(f"Specificity: {tn / (tn + fp):.4f}")
-    print(f"Accuracy: {(tp + tn) / (tp + tn + fp + fn):.4f}%")
+    print(f"Accuracy: {(tp + tn) / (tp + tn + fp + fn):.4f}")
     print("=" * 30)
 
 
@@ -285,3 +285,18 @@ def train_and_evaluate_model_with_smote(
         print(f"\nROC AUC on test set: {total_roc_auc:.4f}")
 
         return y_true, y_pred, y_pred_probs, fpr, tpr, total_roc_auc, model, best_params
+
+def discrimination_threshold(y_true, y_pred_prob, method='f1'):
+    if method == 'f1':
+        precision, recall, thresholds = precision_recall_curve(y_true, y_pred_prob)
+        scores = 2 * (precision * recall) / (precision + recall)
+    elif method == 'accuracy':
+        thresholds = np.unique(y_pred_prob)
+        scores = np.array([])
+        for threshold in thresholds:
+            y_pred = (y_pred_prob >= threshold).astype(int)
+            accuracy = np.mean(y_pred == y_true)
+            scores = np.append(scores, accuracy)
+    best_threshold_idx = np.argmax(scores)
+    best_threshold = thresholds[best_threshold_idx]
+    return best_threshold

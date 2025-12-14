@@ -111,29 +111,59 @@ def tune_hyperparameters(model, param_grid, X, y, numerical_cols, categorical_co
     return best_params
 
 
-def plot_roc(false_positive_rate, true_positive_rate, total_roc_auc):
-    plt.figure(figsize=(6, 5))
-    plt.plot(false_positive_rate, true_positive_rate, color='blue',
-             lw=2, label=f'ROC (AUC = {total_roc_auc:.2f})')
-    plt.plot([0, 1], [0, 1], color='gray', lw=1, linestyle='--')
-    plt.xlabel('False Positive Rate')
-    plt.ylabel('True Positive Rate')
-    plt.title('ROC curve')
-    plt.legend(loc="lower right")
+def plot_distribution(df, target_col, title, xlabel, fig_width=1000, fig_height=600, save_path=None):
+    plt.figure(figsize=(fig_width/100, fig_height/100), dpi=100)
+    ax = sns.barplot(x=df[target_col].value_counts().index, y=df[target_col].value_counts().values, color='#284577')
+    ax.bar_label(ax.containers[0], fontsize=16, padding=-1)
+    plt.xticks(ticks=[0, 1], labels=['No', 'Yes'], fontsize=14)
+    plt.yticks(fontsize=14)
+    plt.xlabel(xlabel, fontsize=16)
+    plt.ylabel('Number of Patients', fontsize=16)
+    plt.title(title, fontsize=18)
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=100)
+
     plt.show()
 
 
-def plot_confusion_matrix(y_true, y_pred=None, y_pred_probs=None, threshold=0.5):
+def plot_roc(false_positive_rate, true_positive_rate, total_roc_auc, fig_width=1000, fig_height=600, save_path=None):
+    plt.figure(figsize=(fig_width/100, fig_height/100), dpi=100)
+    plt.plot(false_positive_rate, true_positive_rate, color='#284577',
+             lw=3, label=f'ROC (AUC = {total_roc_auc:.2f})')
+    plt.plot([0, 1], [0, 1], color='gray', lw=2, linestyle='--')
+    plt.xlabel('False Positive Rate', fontsize=16)
+    plt.ylabel('True Positive Rate', fontsize=16)
+    plt.xticks(fontsize=14)
+    plt.yticks(fontsize=14)
+    plt.title('ROC curve', fontsize=18)
+    plt.legend(loc="lower right", fontsize=14)
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=100)
+
+    plt.show()
+
+
+def plot_confusion_matrix(y_true, y_pred=None, y_pred_probs=None, threshold=0.5, fig_width=800, fig_height=600, save_path=None):
     if y_pred_probs is not None:
         y_pred = (np.array(y_pred_probs) >= threshold).astype(int)
     if y_pred is None:
         raise ValueError("Provide either y_pred or y_pred_probs")
 
     cm = confusion_matrix(y_true, y_pred)
+    plt.figure(figsize=(fig_width/100, fig_height/100), dpi=100)
     sns.heatmap(cm, annot=True, fmt='d', cmap='Blues')
     plt.xlabel('Predicted')
     plt.ylabel('True')
     plt.title(f'Confusion matrix (threshold={threshold})')
+    plt.tight_layout()
+
+    if save_path:
+        plt.savefig(save_path, dpi=100)
+
     plt.show()
 
     tn, fp, fn, tp = cm.ravel()
@@ -169,14 +199,23 @@ def plot_confusion_matrix_multiclass(y_true, y_pred=None, y_pred_probs=None, thr
     plt.show()
 
 
-def plot_feature_importances(model, X, y):
+def plot_feature_importances(model, X, y, title, max_vars=6, fig_width=1000, fig_height=600):
     explainer = dx.Explainer(model, X, y)
     importances = explainer.model_parts()
-    importances.plot()
+    fig = importances.plot(max_vars=max_vars, show=False)
+
+    fig.update_layout(title_text=title, title_x=0.5, title_font_size=25, title_font_color='black')
+    fig.update_layout(font_color='black', font_size=14)
+    fig.update_layout(width=fig_width, height=fig_height)
+    fig.update_annotations(text="", selector={'text': 'XGBClassifier'})
+    fig.update_annotations(font_size=18)
+    fig.update_traces(marker_color='#284577') # '#46bac2'
+    fig.update_layout(yaxis_tickfont_size=18)
+    fig.show()
 
 
-def plot_discrimination_threshold(model, X, y):
-    visualizer = DiscriminationThreshold(model, random_state=2)
+def plot_discrimination_threshold(model, X, y, fig_width=1000, fig_height=600):
+    visualizer = DiscriminationThreshold(model, random_state=2, size=(fig_width, fig_height))
     visualizer.fit(X, y)
     visualizer.show()
     visualizer.show()

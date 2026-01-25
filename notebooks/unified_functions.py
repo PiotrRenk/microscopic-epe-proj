@@ -537,3 +537,48 @@ def mskcc_predict(patient, target='EPE'):
              coefficients[target]['no_negative_cores'] * neg_cores
     
     return np.exp(b) / (1 + np.exp(b))
+
+def plot_threshold_tradeoff(y_true, y_pred_probs):
+    thresholds = np.arange(0.0, 1.01, 0.01)
+    sensitivities = []
+    specificities = []
+    accuracies = []
+
+    for threshold in thresholds:
+        y_pred = (y_pred_probs >= threshold).astype(int)
+        cm = confusion_matrix(y_true, y_pred)
+        tn, fp, fn, tp = cm.ravel()
+
+        sensitivity = tp / (tp + fn) if (tp + fn) > 0 else 0
+        specificity = tn / (tn + fp) if (tn + fp) > 0 else 0
+        accuracy = (tp + tn) / (tp + tn + fp + fn)
+
+        sensitivities.append(sensitivity)
+        specificities.append(specificity)
+        accuracies.append(accuracy)
+
+    sensitivities = np.array(sensitivities)
+    specificities = np.array(specificities)
+    intersection_idx = np.argwhere(np.isclose(sensitivities, specificities, atol=0.05)).flatten()
+    min_diff = float('inf')
+    best_thresh = -1
+    for t, v, v2 in zip(thresholds[intersection_idx], sensitivities[intersection_idx], specificities[intersection_idx]):
+        diff = abs(v - v2)
+        if diff < min_diff:
+            min_diff = diff
+            best_thresh = t
+
+    print(f"Intersection at threshold: {best_thresh:.2f}, diff: {min_diff}")
+
+    plt.figure(figsize=(10, 6))
+    plt.plot(thresholds, sensitivities, label='Sensitivity', color='blue')
+    plt.plot(thresholds, specificities, label='Specificity', color='orange')
+    plt.plot(thresholds, accuracies, label='Accuracy', color='green')
+    plt.axvline(x=best_thresh, color='red', linestyle='--', label=f'Intersection: {best_thresh:.2f}')
+    plt.xlabel('Threshold')
+    plt.ylabel('Metric Value')
+    plt.legend(frameon=True)
+    plt.xticks(np.arange(0, 1.1, 0.1))
+    plt.yticks(np.arange(0, 1.1, 0.1))
+    plt.grid(True)
+    plt.show()

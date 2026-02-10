@@ -7,7 +7,7 @@ from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 from sklearn.model_selection import StratifiedKFold, train_test_split, GridSearchCV
 from sklearn.metrics import roc_auc_score, roc_curve
 
-from src.results.TrainingResult import TrainingResult
+from results.TrainingResult import TrainingResult
 
 
 def get_model_pipeline(

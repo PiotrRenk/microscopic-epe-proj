@@ -1,7 +1,11 @@
 .*
 !.gitignore
 
+.venv/
+
 venv/
 
 test.*
 __pycache__/
+
+data/

@@ -1,2 +1,0 @@
-- [] nomogramy cd
-- [] różnica między nomogramami a modelem

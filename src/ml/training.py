@@ -36,7 +36,8 @@ def get_model_pipeline(
     )
     return model_pipeline
 
-# TODO: check returning of data splits 
+
+# TODO: check returning of data splits
 def train_and_evaluate_model(
     model,
     X: DataFrame,
@@ -53,8 +54,8 @@ def train_and_evaluate_model(
     y_pred = np.array([])
     y_true = np.array([])
 
-    data_split = []
-    model_pipeline: Pipeline | None = None
+    data_splits = []
+    model_pipeline: Pipeline = get_model_pipeline(model, numerical_cols, categorical_cols)
 
     if not tune_params:
         print("Training model with default hyperparameters...\n")
@@ -66,8 +67,13 @@ def train_and_evaluate_model(
 
             X_train_split, X_test_split = X.iloc[train_idx], X.iloc[test_idx]
             y_train_split, y_test_split = y.iloc[train_idx], y.iloc[test_idx]
-            data_split.append(
-                (X_train_split, y_train_split, X_test_split, y_test_split)
+            data_splits.append(
+                {
+                    "X_train": X_train_split,
+                    "y_train": y_train_split,
+                    "X_test": X_test_split,
+                    "y_test": y_test_split,
+                }
             )
 
             model_pipeline.fit(X_train_split, y_train_split)
@@ -95,7 +101,14 @@ def train_and_evaluate_model(
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=tuning_test_size, stratify=y, random_state=42
         )
-        data_split.append((X_train, y_train, X_test, y_test))
+        data_splits.append(
+            {
+                "X_train": X_train,
+                "y_train": y_train,
+                "X_test": X_test,
+                "y_test": y_test,
+            }
+        )
         best_params = tune_hyperparameters(
             model,
             param_grid,
@@ -135,15 +148,10 @@ def train_and_evaluate_model(
         y_pred_probs=y_pred_probs,
         fp_rate=false_positive_rate,
         tp_rate=true_positive_rate,
-        roc_auc=total_roc_auc,
+        roc_auc=float(total_roc_auc),
         pipeline=model_pipeline,
         best_params=best_params,
-        data_splits={
-            "X_train": data_split[0][0],
-            "y_train": data_split[0][1],
-            "X_test": data_split[0][2],
-            "y_test": data_split[0][3],
-        },
+        data_splits=data_splits,
     )
 
 

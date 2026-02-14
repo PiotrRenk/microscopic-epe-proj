@@ -74,7 +74,7 @@ llvmlite==0.44.0
 markupsafe==3.0.3
 matplotlib==3.10.0
 matplotlib-inline==0.1.7
--e file:///B:/Politechnika/Labs/V%20semester/AI/microscopic-epe-proj
+-e .
 minify-html==0.18.1
 mistune==3.1.4
 mpmath==1.3.0

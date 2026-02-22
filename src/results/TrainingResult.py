@@ -18,7 +18,7 @@ class TrainingResult:
     data_splits: list[dict[str, DataFrame | Series]]
     """
     List of all data splits used in training.
-    When using cross-validation with `n` folds, list will contain `n` dictionaries. When using hold out there will be only one dictionary.
+    When using cross-validation with `n` folds, list will contain `n` dictionaries. When using hold out there will be only one dictionary in the list.
     Each dictionary has following keys:
     - 'X_train': DataFrame with training features for the fold
     - 'y_train': Series with training labels for the fold

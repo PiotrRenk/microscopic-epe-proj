@@ -16,5 +16,5 @@
 TODO:
 - refactor remaining notebooks
 - clean up notebooks 
-- delete unnecessary notebooks
+- delete unnecessary notebooks -> archive
 - resolve TODOs in code

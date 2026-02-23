@@ -186,10 +186,18 @@ def plot_feature_importance(
 
 
 def plot_discrimination_threshold(
-    model, X: DataFrame, y: Series, fig_width: int = 1000, fig_height: int = 600
+    model,
+    X: DataFrame,
+    y: Series,
+    is_fitted: str | bool = "auto",
+    fig_width: int = 1000,
+    fig_height: int = 600,
 ) -> None:
     visualizer = DiscriminationThreshold(
-        model, random_state=2, size=(fig_width, fig_height)
+        model,
+        random_state=2,
+        is_fitted=is_fitted,
+        size=(fig_width, fig_height),
     )
     visualizer.fit(X, y)
     visualizer.show()

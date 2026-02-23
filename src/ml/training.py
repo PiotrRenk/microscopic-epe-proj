@@ -49,6 +49,7 @@ def train_and_evaluate_model(
     param_grid: dict | None = None,
     tuning_scoring: str = "roc_auc",
     tuning_test_size: float = 0.2,
+    n_jobs: int = -1,
 ) -> TrainingResult:
     y_pred_probs = np.array([])
     y_pred = np.array([])
@@ -118,6 +119,7 @@ def train_and_evaluate_model(
             categorical_cols,
             n_folds=3,
             scoring=tuning_scoring,
+            n_jobs=n_jobs,
         )
         model.set_params(**best_params)
         print(f"Model hyperparameters after tuning: {model.get_params()}")
@@ -164,6 +166,7 @@ def tune_hyperparameters(
     categorical_cols: list[str],
     n_folds: int = 5,
     scoring: str = "roc_auc",
+    n_jobs: int = -1,
 ):
     model_pipeline = get_model_pipeline(model, numerical_cols, categorical_cols)
     cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=2)
@@ -172,7 +175,7 @@ def tune_hyperparameters(
         param_grid=param_grid,
         scoring=scoring,
         cv=cv,
-        n_jobs=-1,
+        n_jobs=n_jobs,
     )
     grid_search.fit(X, y)
     print(f"Best hyperparameters: {grid_search.best_params_}")

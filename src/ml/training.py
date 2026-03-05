@@ -1,9 +1,15 @@
 import numpy as np
+import optuna
 from pandas import DataFrame, Series
 from sklearn.compose import ColumnTransformer
 from sklearn.impute import SimpleImputer
 from sklearn.metrics import roc_auc_score, roc_curve
-from sklearn.model_selection import GridSearchCV, StratifiedKFold, train_test_split
+from sklearn.model_selection import (
+    GridSearchCV,
+    StratifiedKFold,
+    cross_val_score,
+    train_test_split,
+)
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import MinMaxScaler, OneHotEncoder
 
@@ -39,9 +45,6 @@ def get_model_pipeline(
 
 
 # TODO: check returning of data splits
-# TODO: split to separate train and evaluate functions
-# think of possible changes in TrainingResult class
-# include optuna for hyperparameter tuning
 def train_and_evaluate_model(
     model,
     X: DataFrame,
@@ -50,8 +53,9 @@ def train_and_evaluate_model(
     categorical_cols: list[str],
     n_folds: int = 5,
     tune_params: bool = False,
-    param_grid: dict | None = None,
+    param_function: callable | None = None,
     tuning_scoring: str = "roc_auc",
+    tuning_direction: str = "maximize",
     tuning_test_size: float = 0.2,
     n_jobs: int = -1,
 ) -> TrainingResult:
@@ -105,7 +109,7 @@ def train_and_evaluate_model(
         total_roc_auc = roc_auc_score(y_true, y_pred_probs)
         print(f"ROC AUC score: {total_roc_auc}\n")
 
-    elif tune_params and param_grid is not None:
+    elif tune_params and param_function is not None:
         print("Tuning hyperparameters...\n")
         X_train, X_test, y_train, y_test = train_test_split(
             X, y, test_size=tuning_test_size, stratify=y, random_state=42
@@ -120,13 +124,14 @@ def train_and_evaluate_model(
         )
         best_params = tune_hyperparameters(
             model,
-            param_grid,
+            param_function,
             X_train,
             y_train,
             numerical_cols,
             categorical_cols,
             n_folds=3,
             scoring=tuning_scoring,
+            direction=tuning_direction,
             n_jobs=n_jobs,
         )
         model.set_params(**best_params)
@@ -148,7 +153,7 @@ def train_and_evaluate_model(
 
     else:
         raise ValueError(
-            "If tune_params is True, param_grid must be provided.")
+            "If tune_params is True, param_function must be provided.")
 
     y_true = np.asarray(y_true)
     y_pred = np.asarray(y_pred)
@@ -170,33 +175,46 @@ def train_and_evaluate_model(
 
 def tune_hyperparameters(
     model,
-    param_grid: dict,
+    param_space_function: callable,
     X: DataFrame,
     y: Series,
     numerical_cols: list[str],
     categorical_cols: list[str],
+    n_trials: int = 100,
     n_folds: int = 5,
     scoring: str = "roc_auc",
+    direction: str = "maximize",
     n_jobs: int = -1,
-):
-    model_pipeline = get_model_pipeline(
-        model, numerical_cols, categorical_cols)
+) -> dict:
     cv = StratifiedKFold(n_splits=n_folds, shuffle=True, random_state=2)
-    grid_search = GridSearchCV(
-        estimator=model_pipeline,
-        param_grid=param_grid,
-        scoring=scoring,
-        cv=cv,
-        n_jobs=n_jobs,
-    )
-    grid_search.fit(X, y)
-    print(f"Best hyperparameters: {grid_search.best_params_}")
-    print(f"Best {scoring} score: {grid_search.best_score_}\n")
-    best_params = grid_search.best_params_
-    best_params = {
-        key.replace("classifier__", ""): value for key, value in best_params.items()
-    }
-    return best_params
+
+    def objective(trial):
+        params = param_space_function(trial)
+
+        pipeline_params = {f"classifier__{k}": v for k, v in params.items()}
+
+        model_pipeline = get_model_pipeline(
+            model, numerical_cols, categorical_cols)
+        model_pipeline.set_params(**pipeline_params)
+
+        scores = cross_val_score(
+            model_pipeline,
+            X,
+            y,
+            cv=cv,
+            scoring=scoring,
+            n_jobs=n_jobs,
+        )
+        return np.mean(scores)
+
+    # optuna.logging.set_verbosity(optuna.logging.WARNING)
+    study = optuna.create_study(direction=direction)
+    study.optimize(objective, n_trials=n_trials)
+
+    print(f"Best hyperparameters: {study.best_params}")
+    print(f"Best {scoring} score: {study.best_value:.4f}\n")
+
+    return study.best_params
 
 
 def train_model(
@@ -207,8 +225,9 @@ def train_model(
     categorical_cols: list[str],
     n_folds: int = 5,
     tune_params: bool = False,
-    param_grid: dict | None = None,
+    param_function: callable | None = None,
     tuning_scoring: str = "roc_auc",
+    tuning_direction: str = "maximize",
     tuning_test_size: float = 0.2,
     n_jobs: int = -1,
 ) -> TrainingResult:
@@ -268,7 +287,7 @@ def train_model(
             model, numerical_cols, categorical_cols)
         fully_trained_pipeline.fit(X, y)
 
-    elif tune_params and param_grid is not None:
+    elif tune_params and param_function is not None:
         # first we perform hyperparameter tuning on the holdout training set
         # doing cross-validation on it
         # then we train the model on the whole training set with best hyperparams
@@ -287,13 +306,14 @@ def train_model(
         )
         best_params = tune_hyperparameters(
             model,
-            param_grid,
+            param_function,
             X_train,
             y_train,
             numerical_cols,
             categorical_cols,
             n_folds=3,
             scoring=tuning_scoring,
+            direction=tuning_direction,
             n_jobs=n_jobs,
         )
         model.set_params(**best_params)
@@ -320,7 +340,7 @@ def train_model(
 
     else:
         raise ValueError(
-            "If tune_params is True, param_grid must be provided.")
+            "If tune_params is True, param_function must be provided.")
 
     y_true = np.asarray(y_true)
     y_pred = np.asarray(y_pred)

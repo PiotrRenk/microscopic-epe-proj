@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+
 from numpy.typing import NDArray
 from pandas import DataFrame, Series
 from sklearn.pipeline import Pipeline
@@ -25,6 +26,7 @@ class TrainingResult:
     - 'X_test': DataFrame with testing features for the fold
     - 'y_test': Series with testing labels for the fold
     """
+    fully_trained_pipeline: Pipeline
 
     def get_preprocessor(self) -> Pipeline:
         return self.pipeline.named_steps["preprocessor"]
